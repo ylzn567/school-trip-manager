@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפת מיקום תלמידות</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            direction: rtl;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 45px 20px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+        }
+
+        .hero-section h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        #map {
+            width: 100%;
+            min-height: 650px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card h2 {
+            color: #333;
+            margin-bottom: 18px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .refresh-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 12px 20px;
+            border-radius: 10px;
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/nav') %>
+
+    <div class="container-lg mt-4">
+        <div class="hero-section">
+            <h1>🛰️ מפה חיה של מיקום תלמידות ומורה</h1>
+            <p>הצג את מיקום התלמידות והאזור שבו נמצאת המורה עם עדכון אוטומטי כל 5 שניות.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div id="map"></div>
+            </div>
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <h2>סטטוס מיקום</h2>
+                    <div class="summary-item">
+                        <span>מספר תלמידות פעילות:</span>
+                        <strong id="student-count">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>מספר מורות פעילות:</span>
+                        <strong id="teacher-count">0</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>עדכון אחרון:</span>
+                        <strong id="last-updated">טוען...</strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>סטטוס חיבור:</span>
+                        <strong id="connection-status">...מחכה</strong>
+                    </div>
+                    <button id="refreshButton" class="refresh-button mt-3">טען מיקומים עכשיו</button>
+                </div>
+                <div class="summary-card">
+                    <h2>איך זה עובד</h2>
+                    <p>כל תלמידה ומורה שולחים מיקום JSON לשרת. המפה מתעדכנת אוטומטית כל 5 שניות ומציגה את הסמנים של התלמידות ושל המורה.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12 text-end">
+                <a href="/" class="btn btn-primary">חזרה לדף הבית</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([32.0853, 34.7818], 11);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const routes = [
+            [
+                [32.0840, 34.7800],
+                [32.0855, 34.7830],
+                [32.0870, 34.7860],
+                [32.0890, 34.7890],
+                [32.0905, 34.7870],
+                [32.0915, 34.7840],
+                [32.0925, 34.7810],
+                [32.0910, 34.7770],
+                [32.0890, 34.7740],
+                [32.0860, 34.7730]
+            ],
+            [
+                [32.0735, 34.7680],
+                [32.0750, 34.7715],
+                [32.0770, 34.7740],
+                [32.0790, 34.7765],
+                [32.0810, 34.7785],
+                [32.0830, 34.7795],
+                [32.0850, 34.7805],
+                [32.0870, 34.7815],
+                [32.0885, 34.7830],
+                [32.0900, 34.7850]
+            ],
+            [
+                [32.0760, 34.7860],
+                [32.0775, 34.7845],
+                [32.0790, 34.7830],
+                [32.0810, 34.7820],
+                [32.0830, 34.7810],
+                [32.0845, 34.7800],
+                [32.0860, 34.7790],
+                [32.0875, 34.7780],
+                [32.0890, 34.7770],
+                [32.0905, 34.7760]
+            ]
+        ];
+
+        const teacherRoute = [
+            [32.0890, 34.7890],
+            [32.0880, 34.7870],
+            [32.0870, 34.7850],
+            [32.0860, 34.7830],
+            [32.0850, 34.7810],
+            [32.0835, 34.7795],
+            [32.0820, 34.7780],
+            [32.0810, 34.7765],
+            [32.0800, 34.7750],
+            [32.0785, 34.7735]
+        ];
+
+        const markers = {};
+        const studentCountLabel = document.getElementById('student-count');
+        const teacherCountLabel = document.getElementById('teacher-count');
+        const lastUpdatedLabel = document.getElementById('last-updated');
+        const connectionStatusLabel = document.getElementById('connection-status');
+        const refreshButton = document.getElementById('refreshButton');
+
+        const formatDate = (value) => {
+            const date = new Date(value);
+            return isNaN(date.getTime()) ? 'לא זמין' : date.toLocaleString('he-IL');
+        };
+
+        const buildStudentPopup = (location) => {
+            return `
+                <div style="direction: rtl; text-align: right;">
+                    <strong>תלמידה:</strong> ${location.entity.firstName} ${location.entity.lastName}<br>
+                    <strong>ת.ז.:</strong> ${location.entity.idNumber}<br>
+                    <strong>כיתה:</strong> ${location.entity.className}<br>
+                    <strong>עדכון:</strong> ${formatDate(location.reportedAt)}
+                </div>`;
+        };
+
+        const buildTeacherPopup = (location) => {
+            return `
+                <div style="direction: rtl; text-align: right;">
+                    <strong>מורה:</strong> ${location.entity.firstName} ${location.entity.lastName}<br>
+                    <strong>ת.ז.:</strong> ${location.entity.idNumber}<br>
+                    <strong>כיתה:</strong> ${location.entity.className}<br>
+                    <strong>עדכון:</strong> ${formatDate(location.reportedAt)}
+                </div>`;
+        };
+
+        const getRoutePoint = (route, offset) => {
+            const step = Math.floor(Date.now() / 5000) + offset;
+            return route[step % route.length];
+        };
+
+        const createMarker = (location) => {
+            const latLng = [location.latitude, location.longitude];
+            if (location.type === 'teacher') {
+                return L.circleMarker(latLng, {
+                    radius: 12,
+                    color: '#d9534f',
+                    fillColor: '#d9534f',
+                    fillOpacity: 0.95,
+                    weight: 4
+                }).bindPopup(buildTeacherPopup(location));
+            }
+
+            return L.circleMarker(latLng, {
+                radius: 9,
+                color: '#337ab7',
+                fillColor: '#337ab7',
+                fillOpacity: 0.85,
+                weight: 3
+            }).bindPopup(buildStudentPopup(location));
+        };
+
+        const updateMap = async () => {
+            try {
+                connectionStatusLabel.textContent = 'טוען...';
+                const [studentsResponse, teachersResponse] = await Promise.all([
+                    fetch('/api/students'),
+                    fetch('/api/teachers')
+                ]);
+
+                if (!studentsResponse.ok || !teachersResponse.ok) {
+                    throw new Error('שגיאה בטעינת נתוני המסד');
+                }
+
+                const students = await studentsResponse.json();
+                const teachers = await teachersResponse.json();
+                const locations = [];
+
+                students.forEach((student, index) => {
+                    const route = routes[index % routes.length];
+                    const [latitude, longitude] = getRoutePoint(route, index);
+                    locations.push({
+                        type: 'student',
+                        entity: student,
+                        latitude,
+                        longitude,
+                        reportedAt: new Date().toISOString()
+                    });
+                });
+
+                teachers.forEach((teacher, index) => {
+                    const [latitude, longitude] = getRoutePoint(teacherRoute, index + 1);
+                    locations.push({
+                        type: 'teacher',
+                        entity: teacher,
+                        latitude,
+                        longitude,
+                        reportedAt: new Date().toISOString()
+                    });
+                });
+
+                studentCountLabel.textContent = students.length;
+                teacherCountLabel.textContent = teachers.length;
+                lastUpdatedLabel.textContent = formatDate(new Date());
+                connectionStatusLabel.textContent = 'מחובר';
+
+                const idsSeen = new Set();
+                locations.forEach(location => {
+                    const markerId = `${location.type}-${location.entity.idNumber}`;
+                    idsSeen.add(markerId);
+
+                    if (markers[markerId]) {
+                        markers[markerId].setLatLng([location.latitude, location.longitude]);
+                        markers[markerId].setPopupContent(
+                            location.type === 'teacher' ? buildTeacherPopup(location) : buildStudentPopup(location)
+                        );
+                    } else {
+                        markers[markerId] = createMarker(location).addTo(map);
+                    }
+                });
+
+                Object.keys(markers).forEach(key => {
+                    if (!idsSeen.has(key)) {
+                        map.removeLayer(markers[key]);
+                        delete markers[key];
+                    }
+                });
+
+                const allMarkers = Object.values(markers);
+                if (allMarkers.length > 0) {
+                    const group = L.featureGroup(allMarkers);
+                    map.fitBounds(group.getBounds(), { padding: [40, 40], maxZoom: 15 });
+                }
+            } catch (err) {
+                connectionStatusLabel.textContent = 'שגיאה';
+                console.error(err);
+            }
+        };
+
+        refreshButton.addEventListener('click', updateMap);
+        updateMap();
+        setInterval(updateMap, 5000);
+    </script>
+</body>
+</html>

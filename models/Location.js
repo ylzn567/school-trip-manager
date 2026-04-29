@@ -13,6 +13,10 @@ const studentLocationSchema = new mongoose.Schema({
     longitude: { 
         type: Number, 
         required: true 
+    },
+    reportedAt: {
+        type: Date,
+        required: true
     }
 }, { 
     // במונגו, timestamps נותן לנו אוטומטית שדה createdAt 

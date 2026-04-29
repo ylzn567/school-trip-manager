@@ -116,6 +116,11 @@ const loginTeacher = async (req, res) => {
     }
 };
 
+// Render student tracking map
+const studentMapView = (req, res) => {
+    res.render('student-map');
+};
+
 module.exports = {
     registerTeacherView,
     createTeacherView,
@@ -123,5 +128,6 @@ module.exports = {
     registerStudentView,
     createStudentView,
     loginTeacherView,
-    loginTeacher
+    loginTeacher,
+    studentMapView
 };

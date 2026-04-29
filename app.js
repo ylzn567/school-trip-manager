@@ -6,6 +6,7 @@ require('dotenv').config();
 const connectDB = require('./db/connection');
 const teacherRouter = require('./routers/teacherRouter.js')
 const studentRouter = require('./routers/studentRouter.js')
+const locationRouter = require('./routers/locationRouter.js')
 const viewRouter = require('./routers/viewRouter.js')
 
 const app = express();
@@ -59,6 +60,7 @@ app.get('/', (req, res) => {
 app.use(viewRouter);
 app.use('/api/teachers', teacherRouter);
 app.use('/api/students', studentRouter);
+app.use('/api/locations', locationRouter);
 //app.use('/api/users', userRouter);
 
 app.use((req, res, next) => {
