@@ -11,51 +11,66 @@
         body {
             background-color: #f8f9fa;
             direction: rtl;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Open Sans', sans-serif;
+            color: #212121;
+            margin: 0;
+            padding: 0;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 45px 20px;
-            margin-bottom: 30px;
-            border-radius: 15px;
+        .container-lg {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 16px;
         }
 
-        .hero-section h1 {
-            font-size: 2.8rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        header {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #7f8c8d;
         }
 
         #map {
             width: 100%;
-            min-height: 650px;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-            margin-bottom: 30px;
+            min-height: 640px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .summary-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-            padding: 24px;
-            margin-bottom: 30px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .summary-card h2 {
-            color: #333;
-            margin-bottom: 18px;
+            font-size: 1rem;
+            margin: 0 0 14px;
+            color: #34495e;
+            font-weight: 600;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
+            gap: 12px;
             padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ecf0f1;
         }
 
         .summary-item:last-child {
@@ -63,26 +78,40 @@
         }
 
         .refresh-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #3498db;
             border: none;
-            color: white;
-            font-size: 1rem;
-            padding: 12px 20px;
-            border-radius: 10px;
+            color: #ffffff;
+            font-size: 0.96rem;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
 
         .refresh-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+            background: #2980b9;
         }
 
-        .empty-state {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            color: #666;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+        .warning {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .link-button {
+            display: inline-block;
+            text-decoration: none;
+            color: #3498db;
+            border: 1px solid #3498db;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #ffffff;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .link-button:hover {
+            background: #ecf0f1;
         }
     </style>
 </head>
@@ -92,8 +121,8 @@
 
         <div class="container-lg mt-4">
             <div class="hero-section">
-                <h1>🛰️ מפה חיה של מיקום תלמידות ומורה</h1>
-                <p>הצג את מיקום התלמידות והאזור שבו נמצאת המורה עם עדכון אוטומטי כל 5 שניות.</p>
+                <h1>מפת מיקום תלמידות</h1>
+                <p>מעקב מיקום בזמן אמת של תלמידות ומורה.</p>
             </div>
 
             <div class="row">
@@ -126,11 +155,7 @@
                         </div>
                         <button id="refreshButton" class="refresh-button mt-3">טען מיקומים עכשיו</button>
                     </div>
-                    <div class="summary-card">
-                        <h2>איך זה עובד</h2>
-                        <p>כל תלמידה ומורה שולחים מיקום JSON לשרת. המפה מתעדכנת אוטומטית כל 5 שניות ומציגה את הסמנים של
-                            התלמידות ושל המורה.</p>
-                    </div>
+                    
                 </div>
             </div>
 

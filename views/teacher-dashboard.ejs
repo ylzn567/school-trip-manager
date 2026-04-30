@@ -9,106 +9,119 @@
         body {
             background-color: #f8f9fa;
             direction: rtl;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Open Sans', sans-serif;
+            color: #222222;
+            margin: 0;
         }
-        
+
         .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            margin-bottom: 40px;
-            border-radius: 10px;
+            background: transparent;
+            color: #2c3e50;
+            padding: 24px 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #dee2e6;
         }
-        
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
         .teacher-info {
-            background: white;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        
+
         .teacher-info h3 {
-            color: #667eea;
-            margin-bottom: 15px;
+            color: #34495e;
+            margin-bottom: 16px;
+            font-size: 1rem;
+            font-weight: 600;
         }
-        
+
         .info-item {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ecf0f1;
         }
-        
+
         .info-item:last-child {
             border-bottom: none;
         }
-        
+
         .info-label {
-            font-weight: bold;
-            color: #666;
+            font-weight: 600;
+            color: #7f8c8d;
         }
-        
+
         .info-value {
-            color: #333;
+            color: #2c3e50;
         }
-        
+
         .students-section h2 {
-            color: #333;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            color: #34495e;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 18px;
         }
-        
+
         .student-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
-            border-right: 5px solid #667eea;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        
-        .student-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+        .student-card h4 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 8px;
         }
-        
-        .student-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+
+        .student-details {
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
-        
-        .student-detail {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-            background: white;
-            border-radius: 10px;
-        }
-        
-        .btn-home {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .logout-btn {
+            background: #e74c3c;
             border: none;
-            color: white;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
-        
-        .btn-home:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+
+        .logout-btn:hover {
+            background: #c0392b;
+            color: #ffffff;
+        }
+
+        .map-link {
+            background: #3498db;
+            border: none;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .map-link:hover {
+            background: #2980b9;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -118,7 +131,7 @@
     <div class="container-lg mt-5">
         <!-- Dashboard Header -->
         <div class="dashboard-header">
-            <h1>👋 ברוכה הבאה, <%= teacher.firstName %> <%= teacher.lastName %></h1>
+            <h1> ברוכה הבאה, <%= teacher.firstName %> <%= teacher.lastName %></h1>
             <p class="mb-0">לוח בקרה של מורה</p>
         </div>
 
@@ -126,7 +139,7 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="teacher-info">
-                    <h3>📋 פרטי המורה</h3>
+                    <h3> פרטי המורה</h3>
                     <div class="info-item">
                         <span class="info-label">שם מלא:</span>
                         <span class="info-value"><%= teacher.firstName %> <%= teacher.lastName %></span>
@@ -143,7 +156,7 @@
             </div>
             <div class="col-md-6">
                 <div class="teacher-info">
-                    <h3>📊 סטטיסטיקה</h3>
+                    <h3> סטטיסטיקה</h3>
                     <div class="info-item">
                         <span class="info-label">מספר תלמידות בכיתה:</span>
                         <span class="info-value badge bg-success" style="font-size: 1rem;"><%= students.length %></span>
@@ -158,34 +171,24 @@
 
         <!-- Students List -->
         <div class="students-section">
-            <h2>🎓 תלמידות בכיתה <%= teacher.className %></h2>
+            <h2> תלמידות בכיתה <%= teacher.className %></h2>
             
             <% if (students.length === 0) { %>
                 <div class="empty-state">
                     <p>אין תלמידות רשומות בכיתה זו עדיין</p>
                 </div>
             <% } else { %>
-                <div class="row">
+                <ul class="list-group">
                     <% students.forEach(student => { %>
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="student-card">
-                                <div class="student-name">🎓 <%= student.firstName %> <%= student.lastName %></div>
-                                <div class="student-detail">
-                                    <strong>תעודת זהות:</strong>
-                                    <span><%= student.idNumber %></span>
-                                </div>
-                                <div class="student-detail">
-                                    <strong>כיתה:</strong>
-                                    <span><%= student.className %></span>
-                                </div>
-                                <div class="student-detail">
-                                    <strong>הרשמה:</strong>
-                                    <span><%= new Date(student.createdAt).toLocaleDateString('he-IL') %></span>
-                                </div>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong> <%= student.firstName %> <%= student.lastName %></strong><br>
+                                <small>ת.ז: <%= student.idNumber %></small>
                             </div>
-                        </div>
+                            <span class="badge bg-primary rounded-pill"><%= student.className %></span>
+                        </li>
                     <% }); %>
-                </div>
+                </ul>
             <% } %>
         </div>
 

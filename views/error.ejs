@@ -11,10 +11,10 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-            background: #f7f0f3;
+            font-family: 'Open Sans', sans-serif;
+            background: #f8f9fa;
             line-height: 1.6;
-            color: #2b2b2b;
+            color: #222222;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -22,64 +22,66 @@
         }
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            width: 100%;
             padding: 20px;
         }
         .error-box {
             background: #ffffff;
-            border-left: 6px solid #c41e3a;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+            padding: 32px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         .error-code {
-            font-size: 3em;
-            color: #c41e3a;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 18px;
         }
         h1 {
-            font-family: 'Lucida Calligraphy', 'Segoe Script', 'Brush Script MT', cursive;
-            color: #2b2b2b;
+            color: #2c3e50;
             margin-bottom: 15px;
-            font-size: 1.8em;
+            font-size: 1.6rem;
+            font-weight: 600;
         }
         .error-message {
-            color: #666;
-            font-size: 1.1em;
-            margin-bottom: 30px;
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-bottom: 24px;
             word-break: break-word;
         }
         .error-details {
-            background: #f5f0f3;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 30px;
+            background: #fafafa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+            font-size: 0.9rem;
             color: #555;
             text-align: left;
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
+            border: 1px solid #eaeaea;
         }
         .button-group {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         a {
             display: inline-block;
-            padding: 12px 25px;
-            background: #9b6b7c;
-            color: #fff;
+            padding: 11px 22px;
+            background: #333333;
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 600;
-            transition: background 0.3s ease;
+            transition: background 0.2s ease;
         }
         a:hover {
-            background: #7a5461;
+            background: #111111;
         }
     </style>
 </head>
